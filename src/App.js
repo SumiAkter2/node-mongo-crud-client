@@ -1,22 +1,22 @@
-import { useEffect, useState } from "react";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import AddUser from "./AddUser";
 import "./App.css";
 import Home from "./Component/Home";
 
 function App() {
-  const route = [
+  const router = createBrowserRouter([
     {
       path: "/",
       element: <Home />,
     },
     {
       path: "/user",
-      element: <Home />,
+      element: <AddUser />,
     },
-  ];
+  ]);
   return (
-    
-    <div>
-
+    <div className="App">
+      <RouterProvider router={router}></RouterProvider>
     </div>
   );
 }

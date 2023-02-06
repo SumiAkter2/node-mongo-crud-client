@@ -1,22 +1,36 @@
+import { useState } from "react";
 import { useLoaderData } from "react-router-dom";
 
 function Home() {
   const users = useLoaderData();
+  const [displayUser, setDisplayUser]=useState(users)
 
   const handleDelete = (user) => {
     const agree = window.confirm(`Are you confirm to delete ${user.name} ?`);
     if (agree) {
-      console.log(user.name);
+      // console.log('deleting user with id: ', user._id)
+      fetch(`http://localhost:5000/users/${user._id}`, {
+        method: "DELETE",
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          if (data.deletedCount > 0) {
+            alert('deleted successfully')
+            const remainUser = displayUser.filter(usr => usr._id !== user._id)
+            setDisplayUser(remainUser);
+          }
+        });
     }
   };
   return (
     <div className="App">
       <div>
         <h1>Node Mongo Crud Clients Site</h1>
-        <h1> {users.length}</h1>
+        <h1> {displayUser.length}</h1>
         <div>
-          {users.map((user) => (
-            <p key={users._id}>
+          {displayUser.map((user) => (
+            <p key={user._id}>
               {user.name} ****{user.address}****{user.email} ***
               <button onClick={() => handleDelete(user)}>X</button>
             </p>

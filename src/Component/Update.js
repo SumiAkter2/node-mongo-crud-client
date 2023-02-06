@@ -1,3 +1,4 @@
+import { computeHeadingLevel } from "@testing-library/react";
 import React, { useState } from "react";
 import { useLoaderData } from "react-router-dom";
 
@@ -6,6 +7,20 @@ function Update() {
   const [user, setUser] = useState(storedUser);
   const handleUpdate = (e) => {
     e.preventDefault();
+    fetch(`http://localhost:5000/users/${storedUser._id}`, {
+      method: "PUT",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(user),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.modifiedCount > 0) {
+          console.log(data);
+          alert("update successfully");
+        }
+      });
     console.log(user);
   };
   const inputChange = (e) => {

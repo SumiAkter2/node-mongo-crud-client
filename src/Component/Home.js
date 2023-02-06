@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { useLoaderData } from "react-router-dom";
+import { Link, useLoaderData } from "react-router-dom";
 
 function Home() {
   const users = useLoaderData();
-  const [displayUser, setDisplayUser]=useState(users)
+  const [displayUser, setDisplayUser] = useState(users);
 
   const handleDelete = (user) => {
     const agree = window.confirm(`Are you confirm to delete ${user.name} ?`);
@@ -16,13 +16,16 @@ function Home() {
         .then((data) => {
           console.log(data);
           if (data.deletedCount > 0) {
-            alert('deleted successfully')
-            const remainUser = displayUser.filter(usr => usr._id !== user._id)
+            alert("deleted successfully");
+            const remainUser = displayUser.filter(
+              (usr) => usr._id !== user._id
+            );
             setDisplayUser(remainUser);
           }
         });
     }
   };
+
   return (
     <div className="App">
       <div>
@@ -32,6 +35,9 @@ function Home() {
           {displayUser.map((user) => (
             <p key={user._id}>
               {user.name} ****{user.address}****{user.email} ***
+              <Link to={`/update/${user._id}`}>
+                <button>Update</button>
+              </Link>
               <button onClick={() => handleDelete(user)}>X</button>
             </p>
           ))}

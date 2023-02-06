@@ -4,7 +4,22 @@ const AddUser = () => {
   const [user, setUser] = useState({});
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(user);
+    fetch("http://localhost:5000/users", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(user),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.acknowledged) {
+          alert("successfully added");
+          e.target.reset();
+        }
+        console.log(user);
+      })
+      .catch((err) => console.log(err));
   };
   const inputBlur = (e) => {
     const field = e.target.name;
@@ -34,7 +49,7 @@ const AddUser = () => {
           placeholder="Address"
         />
         <br />
-        <button>Add User</button>
+        <button>Added</button>
       </form>
     </div>
   );

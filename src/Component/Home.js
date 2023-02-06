@@ -1,51 +1,34 @@
-import { useEffect, useState } from "react";
+import { useLoaderData } from "react-router-dom";
 
 function Home() {
-  const [users, setUsers] = useState([]);
-  useEffect(() => {
-    fetch("http://localhost:5000/users")
-      .then((res) => res.json())
-      .then((data) => setUsers(data));
-  }, []);
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const name = e.target.name.value;
-    const vill = e.target.vill.value;
-    const user = { name, vill };
-    e.target.reset();
+  const users = useLoaderData();
 
-    fetch("http://localhost:5000/users", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(user),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        const newUser = [...users, data];
-        setUsers(newUser);
-        console.log(data);
-      })
-      .catch((err) => console.log(err));
+  const handleDelete = (user) => {
+    const agree = window.confirm(`Are you confirm to delete ${user.name} ?`);
+    if (agree) {
+      console.log(user.name);
+    }
   };
   return (
     <div className="App">
       <div>
         <h1>Node Mongo Crud Clients Site</h1>
         <h1> {users.length}</h1>
-        {users.map((user) => (
-          <li key={users._id}>
-            {user.name} ****{user.vill}****
-          </li>
-        ))}
-        <form onSubmit={handleSubmit}>
+        <div>
+          {users.map((user) => (
+            <p key={users._id}>
+              {user.name} ****{user.address}****{user.email} ***
+              <button onClick={() => handleDelete(user)}>X</button>
+            </p>
+          ))}
+        </div>
+        {/* <form onSubmit={handleSubmit}>
           <input type="text" name="name" placeholder="Name" />
           <br />
           <input type="text" name="vill" placeholder="Village" />
           <br />
           <button>Submit</button>
-        </form>
+        </form> */}
       </div>
     </div>
   );
